@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Search, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { tools, categories } from '@/lib/data';
+import { tools, categories, getToolsByCategory } from '@/lib/data';
 import { PageHeader } from '@/components/page-header';
 import { ToolCard } from '@/components/tool-card';
 import { SearchCommandPalette } from '@/components/search-command-palette';
@@ -16,14 +16,14 @@ export default function ToolsPage() {
   const [activeCat, setActiveCat] = React.useState('All');
 
   const filtered = React.useMemo(() => {
-    return tools.filter((t) => {
-      const matchesCat = activeCat === 'All' || t.category === activeCat;
-      const matchesQuery =
-        !query ||
-        t.name.toLowerCase().includes(query.toLowerCase()) ||
-        t.description.toLowerCase().includes(query.toLowerCase());
-      return matchesCat && matchesQuery;
-    });
+    const pool = activeCat === 'All' ? tools : getToolsByCategory(activeCat);
+    if (!query) return pool;
+    const q = query.toLowerCase();
+    return pool.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q)
+    );
   }, [query, activeCat]);
 
   return (

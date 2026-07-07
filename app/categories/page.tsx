@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, LayoutGrid } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { categories, tools } from '@/lib/data';
+import { categories, getToolsByCategory } from '@/lib/data';
 import { PageHeader } from '@/components/page-header';
 import { ToolCard } from '@/components/tool-card';
 
@@ -21,7 +21,7 @@ export default function CategoriesPage() {
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-2">
           {categories.map((cat) => {
-            const catTools = tools.filter((t) => t.category === cat.name || t.category === cat.slug);
+            const catTools = getToolsByCategory(cat.name);
             const featured = catTools[0];
             const actualCount = catTools.length || cat.count;
 

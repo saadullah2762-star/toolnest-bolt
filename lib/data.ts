@@ -842,6 +842,25 @@ export const stats: Stat[] = [
   { value: 'No Sign-up', label: 'Required', icon: Gauge },
 ];
 
+export function getToolsByCategory(categoryName: string): Tool[] {
+  const cat = categories.find((c) => c.name === categoryName || c.slug === categoryName);
+  if (!cat) return [];
+  const aliases: Record<string, string[]> = {
+    'PDF Tools': ['PDF'],
+    'Image Tools': ['Image'],
+    'QR & Barcode Tools': ['QR & Barcode'],
+    'SEO Tools': ['SEO Tools'],
+    'Text Tools': ['Text'],
+    'Developer Tools': ['Developer'],
+    'Calculators': ['Calculators', 'Calculator'],
+    'Converters': ['Converter', 'Converters'],
+    'AI Tools': ['AI'],
+    'Social Media Tools': ['Social Media', 'Social'],
+  };
+  const matches = aliases[cat.name] || [cat.name, cat.slug];
+  return tools.filter((t) => matches.includes(t.category));
+}
+
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((t) => t.slug === slug);
 }
